@@ -4,16 +4,27 @@ function Musicas() {
   const navigate = useNavigate()
 
   const lista = [
-    {
-      nome: "Evidências - Chitãozinho & Xororó",
-      video: "https://www.youtube.com/embed/ePjtnSPFWK8"
-    },
-    {
-      nome: "Boate Azul - Bruno & Marrone",
-      video: "https://www.youtube.com/embed/2bWf5x4hW7Q"
-    }
-  ]
-
+  {
+    nome: "Evidências - Karaokê",
+    video: "https://www.youtube.com/embed/6wSxV6d7zWw"
+  },
+  {
+    nome: "Boate Azul - Karaokê",
+    video: "https://www.youtube.com/embed/0Jz6XKZtKpY"
+  },
+  {
+    nome: "Garçom - Karaokê",
+    video: "https://www.youtube.com/embed/5m8b2x6vQ9E"
+  },
+  {
+    nome: "Infiel - Karaokê",
+    video: "https://www.youtube.com/embed/FYw8G0K7G9Q"
+  },
+  {
+    nome: "Propaganda - Karaokê",
+    video: "https://www.youtube.com/embed/6zqKX0sKx5k"
+  }
+]
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
       
