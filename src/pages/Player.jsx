@@ -14,7 +14,7 @@ function Player() {
     <div style={{ textAlign: "center", marginTop: "30px" }}>
       
       <button
-        onClick={() => navigate("/musicas")}
+        onClick={() => navigate("/musica")}
         style={{ marginBottom: "20px" }}
       >
         ⬅ Voltar
