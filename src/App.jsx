@@ -1,8 +1,10 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
+
 import Home from "./pages/Home"
 import Musicas from "./pages/Musicas"
 import Player from "./pages/Player"
 import Buscar from "./pages/Buscar"
+import Login from "./pages/Login"
 
 const estiloApp = {
   backgroundColor: "#0f0f0f",
@@ -11,17 +13,49 @@ const estiloApp = {
   fontFamily: "Arial"
 }
 
+// 🔒 ROTA PRIVADA
+function RotaPrivada({ children }) {
+  const logado = localStorage.getItem("logado")
+
+  return logado === "true" ? children : <Navigate to="/login" />
+}
+
 function App() {
   return (
     <div style={estiloApp}>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/musicas" element={<Musicas />} />
-        <Route path="/player" element={<Player />} />
-        <Route path="/buscar" element={<Buscar />} />
-      </Routes>
-    </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+
+          {/* 🔓 pública */}
+          <Route path="/login" element={<Login />} />
+
+          {/* 🔒 privadas */}
+          <Route path="/" element={
+            <RotaPrivada>
+              <Home />
+            </RotaPrivada>
+          } />
+
+          <Route path="/musicas" element={
+            <RotaPrivada>
+              <Musicas />
+            </RotaPrivada>
+          } />
+
+          <Route path="/player" element={
+            <RotaPrivada>
+              <Player />
+            </RotaPrivada>
+          } />
+
+          <Route path="/buscar" element={
+            <RotaPrivada>
+              <Buscar />
+            </RotaPrivada>
+          } />
+
+        </Routes>
+      </BrowserRouter>
     </div>
   )
 }

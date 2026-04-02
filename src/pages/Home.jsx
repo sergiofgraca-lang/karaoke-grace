@@ -5,10 +5,9 @@ function Home() {
   const navigate = useNavigate()
   const audioRef = useRef(null)
 
-  // 🔊 tocar música automática
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = 0.2 // volume baixo
+      audioRef.current.volume = 0.2
       audioRef.current.play().catch(() => {})
     }
   }, [])
@@ -16,10 +15,21 @@ function Home() {
   return (
     <div style={estiloContainer}>
       
-      {/* 🎶 ÁUDIO */}
+      {/* 🎶 áudio */}
       <audio ref={audioRef} loop>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" />
       </audio>
+
+      {/* 🚪 botão sair */}
+      <button
+        onClick={() => {
+          localStorage.removeItem("logado")
+          window.location.href = "/login"
+        }}
+        style={botaoSair}
+      >
+        🚪 Sair
+      </button>
 
       <h1 style={titulo}>🎤 Karaoke Grace</h1>
 
@@ -42,10 +52,16 @@ function Home() {
         🎵 Escolher Música
       </button>
 
-      
-
     </div>
   )
+}
+
+const botaoSair = {
+  position: "absolute",
+  top: "20px",
+  right: "20px",
+  padding: "8px 15px",
+  cursor: "pointer"
 }
 
 const estiloContainer = {
@@ -56,8 +72,6 @@ const estiloContainer = {
   height: "100vh",
   color: "#fff",
   textAlign: "center",
-
-  // 🎤 FUNDO DE PALCO
   backgroundImage: "url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819')",
   backgroundSize: "cover",
   backgroundPosition: "center"
@@ -87,4 +101,5 @@ const botao = {
   transition: "0.3s",
   boxShadow: "0 0 15px rgba(255,0,0,0.6)"
 }
+
 export default Home
