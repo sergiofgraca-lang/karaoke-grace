@@ -22,14 +22,14 @@ function Home() {
 
       {/* 🚪 botão sair */}
       <button
-        onClick={() => {
-          localStorage.removeItem("logado")
-          window.location.href = "/login"
-        }}
-        style={botaoSair}
-      >
-        🚪 Sair
-      </button>
+  onClick={() => {
+    localStorage.removeItem("logado")
+    navigate("/login", { replace: true })
+  }}
+  style={botaoSair}
+>
+  🚪 Sair
+</button>
 
       <h1 style={titulo}>🎤 Karaoke Grace</h1>
 
