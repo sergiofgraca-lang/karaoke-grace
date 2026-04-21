@@ -39,10 +39,7 @@ function Player() {
         events: {
           onStateChange: (event) => {
             if (event.data === 0) {
-              // 🔥 PARA o vídeo
               playerRef.current.stopVideo()
-
-              // 🔥 MOSTRA resultado
               mostrarResultado()
             }
           }
@@ -101,22 +98,36 @@ function Player() {
   }
 
   return (
-    <div style={{ textAlign: "center", marginTop: "30px" }}>
+    <div style={{
+      textAlign: "center",
+      marginTop: "30px",
+      position: "relative",
+      zIndex: 10,
+      backgroundColor: "#000",
+      minHeight: "100vh",
+      color: "#fff"
+    }}>
       
       <button onClick={() => navigate("/buscar")}>
         ⬅ Voltar
       </button>
 
-      <h2>🎤 {musica}</h2>
+      <h2 style={{
+        color: "#fff",
+        position: "relative",
+        zIndex: 20
+      }}>
+        🎤 {musica}
+      </h2>
 
-      {/* 🔥 PLAYER ESCONDE QUANDO MOSTRA RESULTADO */}
+      {/* PLAYER */}
       <div style={{
         position: "relative",
         width: "90%",
         maxWidth: "800px",
         margin: "20px auto",
         paddingBottom: "56.25%",
-        display: resultado ? "none" : "block" // 🔥 CORREÇÃO PRINCIPAL
+        display: resultado ? "none" : "block"
       }}>
         <div
           id="player"
@@ -132,7 +143,7 @@ function Player() {
         ></div>
       </div>
 
-      {/* 🎯 RESULTADO */}
+      {/* RESULTADO */}
       {resultado && (
         <div style={{
           position: "fixed",
@@ -144,25 +155,30 @@ function Player() {
           alignItems: "center",
           zIndex: 999999,
           padding: "20px",
-          textAlign: "center"
+          textAlign: "center",
+          transform: "translateZ(0)" // 🔥 CORREÇÃO CRÍTICA MOBILE
         }}>
 
           <div style={{
             fontSize: "clamp(60px, 15vw, 100px)",
-            marginBottom: "10px"
+            marginBottom: "10px",
+            zIndex: 1000000
           }}>
             {resultado.emoji}
           </div>
 
           <h2 style={{
-            fontSize: "clamp(28px, 8vw, 42px)"
+            fontSize: "clamp(28px, 8vw, 42px)",
+            color: "#fff",
+            zIndex: 1000000
           }}>
             Nota: {resultado.nota}
           </h2>
 
           <h3 style={{
             marginBottom: "25px",
-            color: "#ccc"
+            color: "#ccc",
+            zIndex: 1000000
           }}>
             {resultado.mensagem}
           </h3>
