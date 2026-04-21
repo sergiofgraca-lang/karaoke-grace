@@ -42,8 +42,8 @@ function Player() {
       }
 
       playerRef.current = new window.YT.Player("player", {
-        height: "170",
-        width: "300",
+        height: "350",
+        width: "900",
         videoId: videoId,
         events: {
           onStateChange: (event) => {
