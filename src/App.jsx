@@ -13,8 +13,7 @@ const estiloApp = {
   color: "#fff",
   fontFamily: "Arial",
   position: "relative",
-  zIndex: 0,
-  overflow: "hidden"
+  zIndex: 0
 }
 
 // 🔒 ROTA PRIVADA
@@ -26,7 +25,6 @@ function RotaPrivada({ children }) {
 function App() {
   return (
     <div style={estiloApp}>
-      {/* 🔥 CAMADA GLOBAL FORÇADA */}
       <div style={{
         position: "relative",
         zIndex: 1,

@@ -57,12 +57,21 @@ function Player() {
       window.onYouTubeIframeAPIReady = criarPlayer
     }
 
-    // 🔥 CORREÇÃO DEFINITIVA
+    // 🔥🔥🔥 CORREÇÃO FINAL MOBILE
     return () => {
       if (playerRef.current) {
-        playerRef.current.destroy()
+        try {
+          playerRef.current.destroy()
+        } catch (e) {}
         playerRef.current = null
       }
+
+      // 🔥 remove QUALQUER iframe do YouTube
+      document.querySelectorAll("iframe").forEach((iframe) => {
+        if (iframe.src.includes("youtube.com")) {
+          iframe.remove()
+        }
+      })
     }
   }, [videoId])
 
@@ -120,7 +129,6 @@ function Player() {
 
       <h2>🎤 {musica}</h2>
 
-      {/* PLAYER */}
       <div style={{
         position: "relative",
         width: "90%",
@@ -141,7 +149,6 @@ function Player() {
         ></div>
       </div>
 
-      {/* RESULTADO */}
       {resultado && (
         <div style={{
           position: "fixed",
@@ -153,7 +160,6 @@ function Player() {
           alignItems: "center",
           zIndex: 999999
         }}>
-
           <h1>{resultado.emoji}</h1>
           <h2>Nota: {resultado.nota}</h2>
           <h3>{resultado.mensagem}</h3>
@@ -165,7 +171,6 @@ function Player() {
           <button onClick={() => setResultado(null)}>
             ❌ Fechar
           </button>
-
         </div>
       )}
     </div>
