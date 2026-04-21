@@ -10,47 +10,46 @@ function Playlist() {
     setPlaylist(dados)
   }, [])
 
-  function tocar(musica) {
+  function tocar(m) {
     navigate("/player", {
       state: {
-        musica: musica.titulo,
-        video: `https://www.youtube.com/watch?v=${musica.videoId}`
+        musica: m.titulo,
+        video: `https://www.youtube.com/watch?v=${m.videoId}`
       }
     })
   }
 
-  function remover(videoId) {
-    const nova = playlist.filter(m => m.videoId !== videoId)
+  function remover(id) {
+    const nova = playlist.filter(m => m.videoId !== id)
     setPlaylist(nova)
     localStorage.setItem("playlist", JSON.stringify(nova))
   }
 
   return (
-    <div style={{ textAlign: "center", marginTop: "30px" }}>
-      
+    <div style={{ padding: "20px", textAlign: "center" }}>
+
       <button onClick={() => navigate("/")}>⬅ Voltar</button>
 
       <h1>🎶 Minha Playlist</h1>
 
       {playlist.length === 0 && <p>Playlist vazia</p>}
 
-      {playlist.map((m, index) => (
-        <div
-          key={index}
-          style={{
-            margin: "10px auto",
-            padding: "10px",
-            width: "300px",
-            background: "#1c1c1c",
-            borderRadius: "10px"
-          }}
-        >
+      {playlist.map((m, i) => (
+        <div key={i} style={{
+          background: "#1e1e1e",
+          margin: "10px auto",
+          padding: "15px",
+          borderRadius: "10px",
+          width: "90%",
+          maxWidth: "350px"
+        }}>
           <p>{m.titulo}</p>
 
           <button onClick={() => tocar(m)}>▶️ Tocar</button>
           <button onClick={() => remover(m.videoId)}>❌ Remover</button>
         </div>
       ))}
+
     </div>
   )
 }

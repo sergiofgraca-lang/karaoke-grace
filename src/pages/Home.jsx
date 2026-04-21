@@ -5,77 +5,37 @@ function Home() {
   const navigate = useNavigate()
   const [quantidade, setQuantidade] = useState(0)
 
-  function atualizarPlaylist() {
+  useEffect(() => {
     const dados = JSON.parse(localStorage.getItem("playlist")) || []
     setQuantidade(dados.length)
-  }
-
-  useEffect(() => {
-    atualizarPlaylist()
-
-    window.addEventListener("focus", atualizarPlaylist)
-
-    return () => {
-      window.removeEventListener("focus", atualizarPlaylist)
-    }
   }, [])
 
   return (
     <div style={{
       textAlign: "center",
-      marginTop: "50px",
-      backgroundColor: "#0f0f0f",
-      minHeight: "100vh",
-      color: "#fff",
-      position: "relative",
-      zIndex: 1,
-      transform: "translateZ(0)" // 🔥 força render no mobile
+      padding: "30px",
+      minHeight: "100vh"
     }}>
-      
-      {/* 🔥 TÍTULO PRINCIPAL */}
-      <h1 style={{
-        color: "#ffffff",
-        position: "relative",
-        zIndex: 10,
-        textShadow: "0 0 10px rgba(0,0,0,0.8)",
-        transform: "translateZ(0)"
-      }}>
-        🎤 Karaoke Grace
-      </h1>
 
-      {/* 🔥 SUBTÍTULO */}
-      <p style={{
-        color: "#cccccc",
-        fontSize: "16px",
-        position: "relative",
-        zIndex: 10
-      }}>
-        Escolha sua música e solte a voz! 🎶
+      <h1>🎤 Karaoke Grace</h1>
+      <p style={{ color: "#bbb" }}>
+        Escolha sua música e solte a voz 🎶
       </p>
 
-      {/* 🔎 Buscar */}
-      <button
-        onClick={() => navigate("/buscar")}
-        style={estiloBotao}
-      >
+      <button style={btn} onClick={() => navigate("/buscar")}>
         🔎 Buscar Música
       </button>
 
-      {/* 🎶 Playlist */}
-      <button
-        onClick={() => navigate("/playlist")}
-        style={estiloBotao}
-      >
+      <button style={btn} onClick={() => navigate("/playlist")}>
         🎶 Minha Playlist ({quantidade})
       </button>
 
-      {/* 🚪 Logout */}
       <button
+        style={{ ...btn, background: "#444" }}
         onClick={() => {
           localStorage.removeItem("logado")
           navigate("/login")
         }}
-        style={{ ...estiloBotao, backgroundColor: "#444" }}
       >
         🚪 Sair
       </button>
@@ -83,20 +43,16 @@ function Home() {
   )
 }
 
-const estiloBotao = {
+const btn = {
   display: "block",
   margin: "15px auto",
-  padding: "15px 30px",
-  fontSize: "16px",
+  padding: "15px",
+  width: "260px",
   borderRadius: "10px",
   border: "none",
-  cursor: "pointer",
-  backgroundColor: "#ff0000",
-  color: "#ffffff",
-  width: "240px",
-  transition: "0.2s",
-  position: "relative",
-  zIndex: 10 // 🔥 evita ficar atrás de camadas
+  background: "#ff0000",
+  color: "#fff",
+  fontSize: "16px"
 }
 
 export default Home

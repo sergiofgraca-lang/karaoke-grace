@@ -10,11 +10,9 @@ function Player() {
   const playerRef = useRef(null)
   const [resultado, setResultado] = useState(null)
 
-  if (!musica) {
-    return <h2>Erro: música não encontrada</h2>
-  }
+  if (!musica) return <h2>Erro: música não encontrada</h2>
 
-  function pegarVideoId(url) {
+  function getId(url) {
     if (!url) return null
 
     let match = url.match(/v=([^&]+)/)
@@ -26,20 +24,19 @@ function Player() {
     return null
   }
 
-  const videoId = pegarVideoId(video)
+  const videoId = getId(video)
 
   useEffect(() => {
     function criarPlayer() {
       if (!videoId) return
 
       playerRef.current = new window.YT.Player("player", {
-        height: "100%",
-        width: "100%",
-        videoId: videoId,
+        videoId,
         events: {
-          onStateChange: (event) => {
-            if (event.data === 0) {
-              playerRef.current.stopVideo()
+          onStateChange: (e) => {
+            if (e.data === 0) {
+              // 🔥 remove iframe (corrige mobile)
+              playerRef.current.destroy()
               mostrarResultado()
             }
           }
@@ -55,23 +52,6 @@ function Player() {
       document.body.appendChild(tag)
 
       window.onYouTubeIframeAPIReady = criarPlayer
-    }
-
-    // 🔥🔥🔥 CORREÇÃO FINAL MOBILE
-    return () => {
-      if (playerRef.current) {
-        try {
-          playerRef.current.destroy()
-        } catch (e) {}
-        playerRef.current = null
-      }
-
-      // 🔥 remove QUALQUER iframe do YouTube
-      document.querySelectorAll("iframe").forEach((iframe) => {
-        if (iframe.src.includes("youtube.com")) {
-          iframe.remove()
-        }
-      })
     }
   }, [videoId])
 
@@ -91,8 +71,16 @@ function Player() {
 
     setResultado({ nota, emoji, mensagem })
 
-    const audio = new Audio("https://www.myinstants.com/media/sounds/aplausos.mp3")
-    audio.play()
+    // 🔥 SOM DE APLAUSO (corrigido mobile)
+    try {
+      const audio = new Audio("https://www.myinstants.com/media/sounds/aplausos.mp3")
+      audio.volume = 1
+      audio.play().catch(() => {
+        console.log("🔇 autoplay bloqueado no mobile")
+      })
+    } catch (err) {
+      console.log("Erro no áudio:", err)
+    }
   }
 
   function salvarNaPlaylist() {
@@ -115,13 +103,7 @@ function Player() {
   }
 
   return (
-    <div style={{
-      textAlign: "center",
-      marginTop: "30px",
-      backgroundColor: "#000",
-      minHeight: "100vh",
-      color: "#fff"
-    }}>
+    <div style={{ textAlign: "center", padding: "20px" }}>
       
       <button onClick={() => navigate("/buscar")}>
         ⬅ Voltar
@@ -129,48 +111,78 @@ function Player() {
 
       <h2>🎤 {musica}</h2>
 
-      <div style={{
-        position: "relative",
-        width: "90%",
-        maxWidth: "800px",
-        margin: "20px auto",
-        paddingBottom: "56.25%",
-        display: resultado ? "none" : "block"
-      }}>
-        <div
-          id="player"
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%"
-          }}
-        ></div>
-      </div>
+      {/* PLAYER */}
+      {!resultado && (
+        <div style={{
+          width: "90%",
+          maxWidth: "800px",
+          margin: "20px auto"
+        }}>
+          <div id="player"></div>
+        </div>
+      )}
 
+      {/* RESULTADO SHOW */}
       {resultado && (
         <div style={{
           position: "fixed",
           inset: 0,
-          background: "rgba(0,0,0,0.98)",
+          background: "linear-gradient(180deg, #000, #111)",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          zIndex: 999999
+          zIndex: 9999,
+          textAlign: "center",
+          padding: "20px"
         }}>
-          <h1>{resultado.emoji}</h1>
-          <h2>Nota: {resultado.nota}</h2>
-          <h3>{resultado.mensagem}</h3>
 
-          <button onClick={salvarNaPlaylist}>
+          <div style={{
+            fontSize: "clamp(60px, 15vw, 120px)"
+          }}>
+            {resultado.emoji}
+          </div>
+
+          <h2 style={{
+            fontSize: "clamp(28px, 8vw, 48px)"
+          }}>
+            Nota: {resultado.nota}
+          </h2>
+
+          <h3 style={{
+            marginBottom: "25px",
+            color: "#ccc"
+          }}>
+            {resultado.mensagem}
+          </h3>
+
+          <button
+            onClick={salvarNaPlaylist}
+            style={{
+              padding: "14px 30px",
+              borderRadius: "12px",
+              border: "none",
+              background: "#00c853",
+              color: "#fff",
+              marginBottom: "10px"
+            }}
+          >
             💾 Salvar na playlist
           </button>
 
-          <button onClick={() => setResultado(null)}>
+          <button
+            onClick={() => setResultado(null)}
+            style={{
+              padding: "12px 25px",
+              borderRadius: "10px",
+              border: "none",
+              background: "#444",
+              color: "#fff"
+            }}
+          >
             ❌ Fechar
           </button>
+
         </div>
       )}
     </div>
