@@ -5,13 +5,16 @@ import Musicas from "./pages/Musicas"
 import Player from "./pages/Player"
 import Buscar from "./pages/Buscar"
 import Login from "./pages/Login"
-import Playlist from "./pages/Playlist" // ✅ IMPORT NO LUGAR CERTO
+import Playlist from "./pages/Playlist"
 
 const estiloApp = {
   backgroundColor: "#0f0f0f",
   minHeight: "100vh",
   color: "#fff",
-  fontFamily: "Arial"
+  fontFamily: "Arial",
+  position: "relative",
+  zIndex: 0,
+  overflow: "hidden"
 }
 
 // 🔒 ROTA PRIVADA
@@ -23,46 +26,50 @@ function RotaPrivada({ children }) {
 function App() {
   return (
     <div style={estiloApp}>
-      <BrowserRouter>
-        <Routes>
+      {/* 🔥 CAMADA GLOBAL FORÇADA */}
+      <div style={{
+        position: "relative",
+        zIndex: 1,
+        transform: "translateZ(0)"
+      }}>
+        <BrowserRouter>
+          <Routes>
 
-          {/* 🔓 pública */}
-          <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<Login />} />
 
-          {/* 🔒 privadas */}
-          <Route path="/" element={
-            <RotaPrivada>
-              <Home />
-            </RotaPrivada>
-          } />
+            <Route path="/" element={
+              <RotaPrivada>
+                <Home />
+              </RotaPrivada>
+            } />
 
-          <Route path="/musicas" element={
-            <RotaPrivada>
-              <Musicas />
-            </RotaPrivada>
-          } />
+            <Route path="/musicas" element={
+              <RotaPrivada>
+                <Musicas />
+              </RotaPrivada>
+            } />
 
-          <Route path="/player" element={
-            <RotaPrivada>
-              <Player />
-            </RotaPrivada>
-          } />
+            <Route path="/player" element={
+              <RotaPrivada>
+                <Player />
+              </RotaPrivada>
+            } />
 
-          <Route path="/buscar" element={
-            <RotaPrivada>
-              <Buscar />
-            </RotaPrivada>
-          } />
+            <Route path="/buscar" element={
+              <RotaPrivada>
+                <Buscar />
+              </RotaPrivada>
+            } />
 
-          {/* 🎶 NOVA ROTA PLAYLIST (AGORA NO LUGAR CERTO) */}
-          <Route path="/playlist" element={
-            <RotaPrivada>
-              <Playlist />
-            </RotaPrivada>
-          } />
+            <Route path="/playlist" element={
+              <RotaPrivada>
+                <Playlist />
+              </RotaPrivada>
+            } />
 
-        </Routes>
-      </BrowserRouter>
+          </Routes>
+        </BrowserRouter>
+      </div>
     </div>
   )
 }

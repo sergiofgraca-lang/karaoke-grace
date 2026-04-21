@@ -56,6 +56,14 @@ function Player() {
 
       window.onYouTubeIframeAPIReady = criarPlayer
     }
+
+    // 🔥 CORREÇÃO DEFINITIVA
+    return () => {
+      if (playerRef.current) {
+        playerRef.current.destroy()
+        playerRef.current = null
+      }
+    }
   }, [videoId])
 
   function mostrarResultado() {
@@ -101,8 +109,6 @@ function Player() {
     <div style={{
       textAlign: "center",
       marginTop: "30px",
-      position: "relative",
-      zIndex: 10,
       backgroundColor: "#000",
       minHeight: "100vh",
       color: "#fff"
@@ -112,13 +118,7 @@ function Player() {
         ⬅ Voltar
       </button>
 
-      <h2 style={{
-        color: "#fff",
-        position: "relative",
-        zIndex: 20
-      }}>
-        🎤 {musica}
-      </h2>
+      <h2>🎤 {musica}</h2>
 
       {/* PLAYER */}
       <div style={{
@@ -136,9 +136,7 @@ function Player() {
             top: 0,
             left: 0,
             width: "100%",
-            height: "100%",
-            borderRadius: "12px",
-            overflow: "hidden"
+            height: "100%"
           }}
         ></div>
       </div>
@@ -153,60 +151,18 @@ function Player() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          zIndex: 999999,
-          padding: "20px",
-          textAlign: "center",
-          transform: "translateZ(0)" // 🔥 CORREÇÃO CRÍTICA MOBILE
+          zIndex: 999999
         }}>
 
-          <div style={{
-            fontSize: "clamp(60px, 15vw, 100px)",
-            marginBottom: "10px",
-            zIndex: 1000000
-          }}>
-            {resultado.emoji}
-          </div>
+          <h1>{resultado.emoji}</h1>
+          <h2>Nota: {resultado.nota}</h2>
+          <h3>{resultado.mensagem}</h3>
 
-          <h2 style={{
-            fontSize: "clamp(28px, 8vw, 42px)",
-            color: "#fff",
-            zIndex: 1000000
-          }}>
-            Nota: {resultado.nota}
-          </h2>
-
-          <h3 style={{
-            marginBottom: "25px",
-            color: "#ccc",
-            zIndex: 1000000
-          }}>
-            {resultado.mensagem}
-          </h3>
-
-          <button
-            onClick={salvarNaPlaylist}
-            style={{
-              padding: "14px 30px",
-              borderRadius: "12px",
-              border: "none",
-              background: "#00c853",
-              color: "#fff",
-              marginBottom: "10px"
-            }}
-          >
+          <button onClick={salvarNaPlaylist}>
             💾 Salvar na playlist
           </button>
 
-          <button
-            onClick={() => setResultado(null)}
-            style={{
-              padding: "12px 25px",
-              borderRadius: "10px",
-              border: "none",
-              background: "#444",
-              color: "#fff"
-            }}
-          >
+          <button onClick={() => setResultado(null)}>
             ❌ Fechar
           </button>
 
