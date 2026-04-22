@@ -1,58 +1,102 @@
 import { useNavigate } from "react-router-dom"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 
 function Home() {
   const navigate = useNavigate()
   const [quantidade, setQuantidade] = useState(0)
+  const audioRef = useRef(null)
 
-  useEffect(() => {
+  function atualizarPlaylist() {
     const dados = JSON.parse(localStorage.getItem("playlist")) || []
     setQuantidade(dados.length)
+  }
+
+  useEffect(() => {
+    atualizarPlaylist()
+
+    window.addEventListener("focus", atualizarPlaylist)
+
+    // 🎵 Música de fundo (corrigido p/ mobile)
+    if (audioRef.current) {
+      audioRef.current.volume = 0.2
+
+      const playAudio = () => {
+        audioRef.current.play().catch(() => {})
+        document.removeEventListener("click", playAudio)
+      }
+
+      document.addEventListener("click", playAudio)
+    }
+
+    return () => {
+      window.removeEventListener("focus", atualizarPlaylist)
+    }
   }, [])
 
   return (
     <div style={{
-      textAlign: "center",
-      padding: "30px",
-      minHeight: "100vh"
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      minHeight: "100vh",
+      background: "#000",
+      color: "#fff",
+      padding: "20px"
     }}>
 
+      {/* 🎵 Música */}
+      <audio
+        ref={audioRef}
+        src="https://www.bensound.com/bensound-music/bensound-dance.mp3"
+        loop
+      />
+
       <h1>🎤 Karaoke Grace</h1>
-      <p style={{ color: "#bbb" }}>
-        Escolha sua música e solte a voz 🎶
-      </p>
+      <p>Escolha sua música e solte a voz! 🎶</p>
 
-      <button style={btn} onClick={() => navigate("/buscar")}>
-        🔎 Buscar Música
-      </button>
+      {/* 🔥 CONTAINER DOS BOTÕES (FORÇA VERTICAL) */}
+      <div style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "15px",
+        marginTop: "30px",
+        width: "100%",
+        maxWidth: "260px"
+      }}>
 
-      <button style={btn} onClick={() => navigate("/playlist")}>
-        🎶 Minha Playlist ({quantidade})
-      </button>
+        <button style={botao} onClick={() => navigate("/buscar")}>
+          🔎 Buscar Música
+        </button>
 
-      <button
-        style={{ ...btn, background: "#444" }}
-        onClick={() => {
-          localStorage.removeItem("logado")
-          navigate("/login")
-        }}
-      >
-        🚪 Sair
-      </button>
+        <button style={botao} onClick={() => navigate("/playlist")}>
+          🎶 Minha Playlist ({quantidade})
+        </button>
+
+        <button
+          style={{ ...botao, backgroundColor: "#555" }}
+          onClick={() => {
+            localStorage.removeItem("logado")
+            navigate("/login")
+          }}
+        >
+          🚪 Sair
+        </button>
+
+      </div>
     </div>
   )
 }
 
-const btn = {
-  display: "block",
-  margin: "15px auto",
+const botao = {
+  width: "100%",
   padding: "15px",
-  width: "260px",
+  fontSize: "16px",
   borderRadius: "10px",
   border: "none",
-  background: "#ff0000",
-  color: "#fff",
-  fontSize: "16px"
+  cursor: "pointer",
+  backgroundColor: "#ff0000",
+  color: "#fff"
 }
 
 export default Home
