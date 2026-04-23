@@ -35,7 +35,6 @@ function Player() {
         events: {
           onStateChange: (e) => {
             if (e.data === 0) {
-              // 🔥 remove iframe (ESSENCIAL mobile)
               playerRef.current.destroy()
               mostrarResultado()
             }
@@ -76,25 +75,37 @@ function Player() {
 
     setResultado({ nota, emoji, mensagem })
 
-    // 🔊 áudio (pode falhar no mobile)
     const audio = new Audio("https://www.myinstants.com/media/sounds/aplausos.mp3")
     audio.play().catch(() => {})
   }
 
+  // 🔥 ALTERAÇÃO AQUI
   function salvarNaPlaylist() {
     let playlist = JSON.parse(localStorage.getItem("playlist")) || []
 
-    const musicaAtual = {
-      titulo: musica,
-      videoId: videoId
+    const cantor = prompt("🎤 Quem cantou essa música?")
+
+    if (!cantor) {
+      alert("Digite o nome do cantor!")
+      return
     }
 
-    if (!playlist.find(m => m.videoId === musicaAtual.videoId)) {
+    const musicaAtual = {
+      titulo: musica,
+      videoId: videoId,
+      cantor: cantor
+    }
+
+    const existe = playlist.find(
+      m => m.videoId === musicaAtual.videoId && m.cantor === cantor
+    )
+
+    if (!existe) {
       playlist.push(musicaAtual)
       localStorage.setItem("playlist", JSON.stringify(playlist))
-      alert("Salvo na playlist!")
+      alert(`Salvo! 🎶 Cantor: ${cantor}`)
     } else {
-      alert("Já está na playlist!")
+      alert("Esse cantor já salvou essa música!")
     }
   }
 
@@ -115,14 +126,13 @@ function Player() {
         🎤 {musica}
       </h2>
 
-      {/* 🎥 PLAYER CORRETO (16:9) */}
       {!resultado && (
         <div style={{
           position: "relative",
           width: "100%",
           maxWidth: "800px",
           margin: "20px auto",
-          paddingBottom: "56.25%" // 16:9
+          paddingBottom: "56.25%"
         }}>
           <div
             id="player"
@@ -139,7 +149,6 @@ function Player() {
         </div>
       )}
 
-      {/* 🎯 RESULTADO */}
       {resultado && (
         <div style={{
           position: "fixed",
