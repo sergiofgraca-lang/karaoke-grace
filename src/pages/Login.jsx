@@ -6,8 +6,12 @@ function Login() {
   const [senha, setSenha] = useState("")
   const navigate = useNavigate()
 
+  // 🔐 CONFIGURAÇÃO
+  const USUARIO = "Sirgio"
+  const SENHA = "Sirgiograce@1" // 🔥 MUDE AQUI
+
   const entrar = () => {
-    if (usuario === "admin" && senha === "1234") {
+    if (usuario === USUARIO && senha === SENHA) {
       localStorage.setItem("logado", "true")
       navigate("/")
     } else {
@@ -20,7 +24,8 @@ function Login() {
 
       <div style={card}>
         <h2 style={titulo}>🔐 Login</h2>
-         <h1 style={titulo}>🎤 Karaoke Grace</h1>
+        <h1 style={titulo}>🎤 Karaoke Grace</h1>
+
         <input
           type="text"
           placeholder="Usuário"
@@ -37,10 +42,7 @@ function Login() {
           style={input}
         />
 
-        <button
-          onClick={entrar}
-          style={botao}
-        >
+        <button onClick={entrar} style={botao}>
           Entrar
         </button>
       </div>
@@ -58,8 +60,6 @@ const container = {
   justifyContent: "center",
   alignItems: "center",
   height: "100vh",
-
-  // 🎤 MESMO FUNDO DA HOME
   backgroundImage: "url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819')",
   backgroundSize: "cover",
   backgroundPosition: "center"
